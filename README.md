@@ -1,4 +1,4 @@
-# GordonRamsayOpenCV-Hack112
+# Hell's Komputer
 
 Hack112 2020 Project, using OpenCV for facial movement detection to keep a user on their toes by having audio files of Gordon Ramsay insults, just as Gordon Ramsay would in real life. 
 
