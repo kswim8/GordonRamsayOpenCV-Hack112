@@ -25,7 +25,7 @@ while(True):
 	# if face not detected, ie. looking down/away, inactive ++
     if face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=5) == ():
     	inactiveCount += 1
-    	if inactiveCount > 30:
+    	if inactiveCount > 100:
     			# play sound of Gordon Ramsay insult
     			sounds = ['are-you-always-this-pathetic.mp3',
     					  'get-in-there.mp3', 'this-is-wrong.mp3']
@@ -40,7 +40,7 @@ while(True):
     	# if user has bad posture, ie. sitting low in seat or not centered 
     	if ((x < 200 or x > 300) or (y > 220)):
     		inactiveCount += 1
-    		if inactiveCount > 30:
+    		if inactiveCount > 100:
     			# play sound of Gordon Ramsay insult
     			sounds = ['are-you-always-this-pathetic.mp3',
 						  'get-in-there.mp3', 'this-is-wrong.mp3']
