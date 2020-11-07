@@ -14,29 +14,38 @@ cap = cv2.VideoCapture(1)
 inactiveCount = 0
 
 while(True):
-    # Capture frame-by-frame
+    # capture the camera windows frame-by-frame
     ret, frame = cap.read()
+	# use grayscale to best capture face features
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=5)
-    for (x, y, w, h) in faces:
-    	print(x,y,w,h)
-    	roi_gray = gray[y:y+h, x:x+w] #(ycord_start, ycord_end)
-    	roi_color = frame[y:y+h, x:x+w]
-		
-    	startTime = time.time()
-    	print(x, y, w, h)
-    	(currentX, currentY, currentW, currentH) = (x, y, w, h)
-		
-    	if ((x == currentX) and (y == currentY) and (w == currentW) and (h == currentH)):
-    		inactiveCount += 1
-    		if inactiveCount > 30:
-    			#play sound
-    			sounds = ['are-you-always-this-pathetic.mp3','get-in-there.mp3', 'this-is-wrong.mp3']
-    			# playsound('are-you-always-this-pathetic.mp3','get-in-there.mp3')
+
+    # print(face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=5))
+
+	# if face not detected, ie. looking down/away, inactive ++
+    if face_cascade.detectMultiScale(gray, scaleFactor=2, minNeighbors=5) == ():
+    	inactiveCount += 1
+    	if inactiveCount > 30:
+    			# play sound of Gordon Ramsay insult
+    			sounds = ['are-you-always-this-pathetic.mp3',
+    					  'get-in-there.mp3', 'this-is-wrong.mp3']
     			playsound(sounds[random.randint(0, len(sounds)-1)])
     			inactiveCount = 0
-		
-    	print(inactiveCount)
+
+	# if the face is detected, check for posture			
+    for (x, y, w, h) in faces:
+    	roi_gray = gray[y:y+h, x:x+w] # (ycord_start, ycord_end)
+    	roi_color = frame[y:y+h, x:x+w]
+
+    	# if user has bad posture, ie. sitting low in seat or not centered 
+    	if ((x < 200 or x > 300) or (y > 220)):
+    		inactiveCount += 1
+    		if inactiveCount > 30:
+    			# play sound of Gordon Ramsay insult
+    			sounds = ['are-you-always-this-pathetic.mp3',
+						  'get-in-there.mp3', 'this-is-wrong.mp3']
+    			playsound(sounds[random.randint(0, len(sounds)-1)])
+    			inactiveCount = 0
 
     	color = (255, 0, 0) #BGR 0-255 
     	stroke = 2
@@ -46,6 +55,7 @@ while(True):
 
     # Display the resulting frame
     cv2.imshow('frame',frame)
+    print(inactiveCount)
     if cv2.waitKey(20) & 0xFF == ord('q'):
         break
 
